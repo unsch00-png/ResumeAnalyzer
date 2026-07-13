@@ -8,6 +8,8 @@ const analysisSchema = new mongoose.Schema(
     weaknesses: [String],
     missingKeywords: [String],
     suggestions: [String],
+    jobMatchScore: Number,
+    jobMatchGaps: [String],
   },
   { timestamps: true }
 );

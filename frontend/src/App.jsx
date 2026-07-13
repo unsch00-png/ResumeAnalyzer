@@ -1,9 +1,12 @@
+import jsPDF from 'jspdf';
 import { useState, useEffect } from 'react';
 import API from './api';
 import './App.css';
 
 function App() {
   const [file, setFile] = useState(null);
+  const [docType, setDocType] = useState('');
+  const [jobDescription, setJobDescription] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
@@ -30,7 +33,7 @@ function App() {
 
   const handleAnalyze = async () => {
     if (!file) {
-      setError('Please select a PDF resume first');
+      setError('Please select a resume file first');
       return;
     }
 
@@ -40,6 +43,9 @@ function App() {
 
     const formData = new FormData();
     formData.append('resume', file);
+    if (jobDescription.trim()) {
+      formData.append('jobDescription', jobDescription);
+    }
 
     try {
       const res = await API.post('/analyze', formData, {
@@ -70,6 +76,56 @@ function App() {
     }
   };
 
+  const handleExportPDF = () => {
+    const doc = new jsPDF();
+    let y = 20;
+
+    doc.setFontSize(18);
+    doc.text('Resume Analysis Report', 20, y);
+    y += 12;
+
+    doc.setFontSize(12);
+    doc.text(`Overall Score: ${result.overallScore}/100`, 20, y);
+    y += 8;
+
+    if (result.jobMatchScore !== undefined && result.jobMatchScore !== null) {
+      doc.text(`Job Match Score: ${result.jobMatchScore}/100`, 20, y);
+      y += 10;
+    } else {
+      y += 4;
+    }
+
+    const addSection = (title, items) => {
+      doc.setFontSize(14);
+      doc.text(title, 20, y);
+      y += 8;
+      doc.setFontSize(11);
+      items.forEach((item) => {
+        const lines = doc.splitTextToSize(`• ${item}`, 170);
+        lines.forEach((line) => {
+          if (y > 280) {
+            doc.addPage();
+            y = 20;
+          }
+          doc.text(line, 20, y);
+          y += 6;
+        });
+      });
+      y += 6;
+    };
+
+    addSection('Strengths', result.strengths);
+    addSection('Weaknesses', result.weaknesses);
+    addSection('Missing Keywords', result.missingKeywords);
+    addSection('Suggestions', result.suggestions);
+
+    if (result.jobMatchGaps && result.jobMatchGaps.length > 0) {
+      addSection('Job Match Gaps', result.jobMatchGaps);
+    }
+
+    doc.save('Resume_Analysis_Report.pdf');
+  };
+
   return (
     <div className="page">
       <header className="header">
@@ -80,12 +136,47 @@ function App() {
       <div className="main-layout">
         <div className="main-content">
           <div className="upload-card">
-            <input
-              type="file"
-              accept="application/pdf"
-              onChange={handleFileChange}
-              className="file-input"
-            />
+            <div className="upload-row">
+              <div className="upload-field">
+                <label className="upload-label">Document Type *</label>
+                <select
+                  value={docType}
+                  onChange={(e) => setDocType(e.target.value)}
+                  className="doc-type-select"
+                >
+                  <option value="">Document Type</option>
+                  <option value=".pdf">PDF</option>
+                  <option value=".docx">DOCX</option>
+                </select>
+              </div>
+
+              <div className="upload-field">
+                <label className="upload-label">Select file from your computer</label>
+                <label className={`choose-file-btn ${!docType ? 'disabled' : ''}`}>
+                  + Choose File
+                  <input
+                    type="file"
+                    accept={docType || '.pdf,.docx'}
+                    onChange={handleFileChange}
+                    style={{ display: 'none' }}
+                    disabled={!docType}
+                  />
+                </label>
+                {file && <p className="file-name">{file.name}</p>}
+              </div>
+            </div>
+
+            <div className="job-desc-field">
+              <label className="upload-label">Job Description (optional)</label>
+              <textarea
+                placeholder="Paste a job description here to see how well your resume matches..."
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
+                rows={5}
+                className="job-desc-input"
+              />
+            </div>
+
             <button onClick={handleAnalyze} disabled={loading} className="btn-analyze">
               {loading ? 'Analyzing...' : 'Analyze Resume'}
             </button>
@@ -94,10 +185,31 @@ function App() {
 
           {result && (
             <div className="results">
+              <button onClick={handleExportPDF} className="btn-export">
+                📥 Export as PDF
+              </button>
+
               <div className="score-card">
                 <p className="score-label">Overall Score</p>
                 <p className="score-number">{result.overallScore}/100</p>
               </div>
+
+              {result.jobMatchScore !== undefined && result.jobMatchScore !== null && (
+                <div className="job-match-card">
+                  <p className="score-label">Job Match Score</p>
+                  <p className="score-number">{result.jobMatchScore}/100</p>
+                  {result.jobMatchGaps && result.jobMatchGaps.length > 0 && (
+                    <div className="job-gaps">
+                      <p className="job-gaps-title">Gaps for this role:</p>
+                      <ul>
+                        {result.jobMatchGaps.map((gap, i) => (
+                          <li key={i}>{gap}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <div className="section">
                 <h3>✅ Strengths</h3>
