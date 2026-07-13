@@ -1,3 +1,4 @@
+const Analysis = require('../models/Analysis');
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
@@ -41,6 +42,14 @@ ${resumeText}`;
     responseText = responseText.replace(/```json|```/g, '').trim();
 
     const analysis = JSON.parse(responseText);
+    await Analysis.create({
+  fileName: req.file.originalname,
+  overallScore: analysis.overallScore,
+  strengths: analysis.strengths,
+  weaknesses: analysis.weaknesses,
+  missingKeywords: analysis.missingKeywords,
+  suggestions: analysis.suggestions,
+});
     res.json(analysis);
   } catch (err) {
     console.error('Error analyzing resume:', err);
@@ -48,4 +57,22 @@ ${resumeText}`;
   }
 });
 
+router.get('/history', async (req, res) => {
+  try {
+    const history = await Analysis.find().sort({ createdAt: -1 }).limit(10);
+    res.json(history);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;
+
+router.delete('/history/:id', async (req, res) => {
+  try {
+    await Analysis.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});

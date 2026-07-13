@@ -1,0 +1,213 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #F7F8FA;
+  color: #1A1A1A;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  color: #1B2A4A;
+  margin-bottom: 6px;
+}
+
+.header p {
+  color: #6B7280;
+  margin: 0;
+}
+
+.main-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.upload-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  text-align: center;
+}
+
+.file-input {
+  display: block;
+  margin: 0 auto 16px;
+}
+
+.btn-analyze {
+  background-color: #1B2A4A;
+  color: #fff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-analyze:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #EF4444;
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.results {
+  margin-top: 24px;
+}
+
+.score-card {
+  background-color: #1B2A4A;
+  color: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.score-label {
+  margin: 0;
+  font-size: 13px;
+  color: #D6DCE8;
+}
+
+.score-number {
+  margin: 4px 0 0;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.section h3 {
+  margin-top: 0;
+  color: #1B2A4A;
+}
+
+.section ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.section li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.keyword-tag {
+  background-color: #FF6B5B;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+.sidebar {
+  width: 280px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  flex-shrink: 0;
+  position: sticky;
+  top: 20px;
+}
+
+.sidebar h3 {
+  margin-top: 0;
+  color: #1B2A4A;
+}
+
+.history-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-name {
+  margin: 0;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.history-date {
+  margin: 2px 0 4px;
+  font-size: 11px;
+  color: #6B7280;
+}
+
+.history-score {
+  font-weight: 700;
+  color: #1B2A4A;
+  background-color: #F7F8FA;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  display: inline-block;
+}
+
+@media (max-width: 800px) {
+  .main-layout {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    position: static;
+  }
+}
+
+.history-delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 0;
+  background: none;
+  border: none;
+  color: #EF4444;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.history-delete-btn:hover {
+  font-weight: bold;
+}
