@@ -1,3 +1,4 @@
+const protect = require('../middleware/authMiddleware');
 const mammoth = require('mammoth');
 const Analysis = require('../models/Analysis');
 const express = require('express');
@@ -9,7 +10,7 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 const upload = multer({ storage: multer.memoryStorage() });
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-router.post('/analyze', upload.single('resume'), async (req, res) => {
+router.post('/analyze', protect, upload.single('resume'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
@@ -63,6 +64,7 @@ ${resumeText}`;
     const analysis = JSON.parse(responseText);
 
     await Analysis.create({
+      userId: req.userId,
       fileName: req.file.originalname,
       overallScore: analysis.overallScore,
       strengths: analysis.strengths,
@@ -80,18 +82,18 @@ ${resumeText}`;
   }
 });
 
-router.get('/history', async (req, res) => {
+router.get('/history', protect, async (req, res) => {
   try {
-    const history = await Analysis.find().sort({ createdAt: -1 }).limit(10);
+    const history = await Analysis.find({ userId: req.userId }).sort({ createdAt: -1 }).limit(10);
     res.json(history);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-router.delete('/history/:id', async (req, res) => {
+router.delete('/history/:id', protect, async (req, res) => {
   try {
-    await Analysis.findByIdAndDelete(req.params.id);
+    await Analysis.findOneAndDelete({ _id: req.params.id, userId: req.userId });
     res.json({ message: 'Deleted successfully' });
   } catch (err) {
     res.status(500).json({ message: err.message });

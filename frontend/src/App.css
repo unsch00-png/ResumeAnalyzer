@@ -16,24 +16,46 @@ body {
 }
 
 .header {
-  text-align: center;
+  background-color: #1B2A4A;
+  padding: 24px 32px;
+  border-radius: 16px;
   margin-bottom: 30px;
 }
 
 .header h1 {
-  color: #1B2A4A;
-  margin-bottom: 6px;
+  color: #fff;
+  margin: 0 0 4px;
+  font-size: 24px;
 }
 
 .header p {
-  color: #6B7280;
+  color: #B8C2D9;
   margin: 0;
+  font-size: 14px;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-top h1,
+.header-top p {
+  text-align: left;
+  margin: 0;
+}
+
+.header-top h1 {
+  margin-bottom: 4px;
 }
 
 .main-layout {
   display: flex;
   gap: 24px;
   align-items: flex-start;
+  margin-top: 24px;
 }
 
 .main-content {
@@ -325,4 +347,117 @@ body {
 .btn-export:hover {
   background-color: #1B2A4A;
   color: #fff;
+}
+
+.score-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.score-row .score-card,
+.score-row .job-match-card {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.two-col {
+  display: flex;
+  gap: 16px;
+}
+
+.two-col .section {
+  flex: 1;
+}
+
+@media (max-width: 700px) {
+  .score-row,
+  .two-col {
+    flex-direction: column;
+  }
+}
+
+.empty-state {
+  background: #fff;
+  border-radius: 12px;
+  padding: 60px 20px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.user-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.btn-logout {
+  background-color: transparent;
+  border: 1.5px solid #FF6B5B;
+  color: #FF6B5B;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-logout:hover {
+  background-color: #FF6B5B;
+  color: #fff;
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1B2A4A 0%, #2d4270 100%);
+  padding: 20px;
+}
+
+.auth-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px 36px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.auth-card h1 {
+  color: #1B2A4A;
+  margin-bottom: 6px;
+  font-size: 22px;
+}
+
+.auth-subtitle {
+  color: #6B7280;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.auth-switch {
+  margin-top: 16px;
+  font-size: 13px;
+  color: #6B7280;
+}
+
+.auth-switch a {
+  color: #1B2A4A;
+  font-weight: 600;
+}
+
+.auth-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
 }

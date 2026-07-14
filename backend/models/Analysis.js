@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const analysisSchema = new mongoose.Schema(
   {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     fileName: String,
     overallScore: Number,
     strengths: [String],
