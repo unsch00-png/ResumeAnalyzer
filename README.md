@@ -14,7 +14,7 @@ A full-stack AI-powered web app that analyzes resumes and provides instant, acti
 
 | Login | Signup |
 |-------|--------|
-| ![Login](./assets/screenshots/LoginPage.png) | ![Signup](./assets/screenshots/SignupPage.png) |
+| ![Login](./assets/screenshots/LoginPage.png) | ![Signup](./assets/screenshots/Signup.png) |
 
 | Upload | Analysis Results |
 |--------|-------------------|
